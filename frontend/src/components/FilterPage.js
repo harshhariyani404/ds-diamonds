@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { diamondsAPI } from '../utils/api';
 import './FilterPage.css';
@@ -24,7 +24,6 @@ const FilterPage = () => {
   const [error, setError] = useState('');
   const [total, setTotal] = useState(0);
 
-  // Filter options
   const shapes = ['ROUND', 'PRINCESS', 'CUSHION', 'EMERALD', 'OVAL', 'PEAR', 'MARQUISE', 'RADIANT', 'HEART', 'ASSCHER'];
   const clarities = ['FL', 'IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3'];
   const colors = ['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -32,17 +31,14 @@ const FilterPage = () => {
   const fluorescences = ['NONE', 'FAINT', 'MEDIUM', 'STRONG', 'VERY STRONG'];
   const certificates = ['GIA', 'IGI', 'HRD', 'AGS', 'EGL', 'OTHER'];
 
-  // Load diamonds on component mount
-  useEffect(() => {
-    fetchDiamonds();
-  }, []);
-
-  const fetchDiamonds = async () => {
+  // ✅ FIXED: memoized function
+  const fetchDiamonds = useCallback(async () => {
     setLoading(true);
     setError('');
+
     try {
       const params = {};
-      Object.keys(filters).forEach(key => {
+      Object.keys(filters).forEach((key) => {
         if (filters[key]) {
           params[key] = filters[key];
         }
@@ -57,10 +53,15 @@ const FilterPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  // ✅ FIXED: correct dependency
+  useEffect(() => {
+    fetchDiamonds();
+  }, [fetchDiamonds]);
 
   const handleFilterChange = (key, value) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
       [key]: value,
     }));
@@ -85,9 +86,6 @@ const FilterPage = () => {
       maxPrice: '',
       carat: '',
     });
-    setTimeout(() => {
-      fetchDiamonds();
-    }, 100);
   };
 
   return (
@@ -292,7 +290,7 @@ const FilterPage = () => {
         {loading ? (
           <div className="loading">Loading diamonds...</div>
         ) : diamonds.length === 0 ? (
-          <div className="loading">No diamonds found. Try adjusting your filters.</div>
+          <div className="loading">No diamonds found.</div>
         ) : (
           <div style={{ overflowX: 'auto', width: '100%' }}>
             <table className="diamonds-table">
@@ -312,7 +310,7 @@ const FilterPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {diamonds.map(diamond => (
+                {diamonds.map((diamond) => (
                   <tr key={diamond._id}>
                     <td>{diamond.shape}</td>
                     <td>{diamond.carat}</td>

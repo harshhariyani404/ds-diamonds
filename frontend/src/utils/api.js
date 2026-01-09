@@ -1,15 +1,12 @@
 import axios from 'axios';
-// const API_URL = process.env.REACT_APP_API_URL || 'https://ds-diamonds.onrender.com';
 
-// Create axios instance
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: process.env.REACT_APP_API_URL, // must end with /api
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Add token to requests if available
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -18,9 +15,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 // Auth API
