@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = process.env.REACT_APP_API_URL || 'https://ds-diamonds.onrender.com';
+// const API_URL = process.env.REACT_APP_API_URL || 'https://ds-diamonds.onrender.com';
 
 // Create axios instance
 const api = axios.create({
