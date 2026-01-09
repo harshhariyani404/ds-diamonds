@@ -1,10 +1,9 @@
 import axios from 'axios';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'https://ds-diamonds.onrender.com';
 
 // Create axios instance
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: process.env.REACT_APP_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -27,7 +26,8 @@ api.interceptors.request.use(
 // Auth API
 export const authAPI = {
   login: (email, password) => api.post('/auth/login', { email, password }),
-  register: (username, email, password) => api.post('/auth/register', { username, email, password }),
+  register: (username, email, password) =>
+    api.post('/auth/register', { username, email, password }),
   getMe: () => api.get('/auth/me'),
 };
 
@@ -41,4 +41,3 @@ export const diamondsAPI = {
 };
 
 export default api;
-
