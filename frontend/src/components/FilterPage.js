@@ -93,7 +93,10 @@ const FilterPage = () => {
       <div className="filter-header">
         <div className="header-content">
           <div>
+
+            <a href="https://dsbrothers.group/" className='Heading'>
             <h1>💎 D.S. Brothers</h1>
+            </a>
             <p>Search and filter diamonds by various attributes</p>
           </div>
           <Link to="/admin/login" className="admin-login-btn">

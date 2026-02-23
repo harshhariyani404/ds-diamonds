@@ -4,6 +4,10 @@
   padding: 20px;
 }
 
+.Heading{
+  text-decoration: none;
+}
+
 .filter-header {
   background: white;
   padding: 20px;
